@@ -97,15 +97,12 @@
             text-align: center;
             padding: 0 20px;
         }
-        .hero-img-wrapper {
-            position: relative;
-            margin-bottom: 40px;
-        }
         .hero img {
             width: 320px;
             border-radius: 24px;
             filter: grayscale(20%) brightness(90%);
             transition: 0.5s;
+            margin-bottom: 40px;
         }
         .hero:hover img { filter: grayscale(0%) brightness(100%); transform: scale(1.02); }
         
@@ -118,7 +115,7 @@
             margin-bottom: 10px;
         }
 
-        /* --- CARDS & CONTENT --- */
+        /* --- HOVER CARDS (SIGNATURE CRAFT) --- */
         .section { padding: 100px 10%; }
         h3 { font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 40px; color: var(--accent); }
         
@@ -127,17 +124,58 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
+
         .card {
             background: var(--card-bg);
             padding: 40px;
             border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.05);
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
+
         .card:hover {
-            background: rgba(212, 163, 115, 0.1);
+            background: rgba(212, 163, 115, 0.15);
             border-color: var(--accent);
             transform: translateY(-10px);
+        }
+
+        .mini-info {
+            max-height: 0;
+            opacity: 0;
+            transition: 0.5s ease;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 0;
+        }
+
+        .card:hover .mini-info {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        /* --- THE COLLECTIVE (TOOLTIP STYLE) --- */
+        .member-card {
+            cursor: help;
+        }
+
+        .description-reveal {
+            font-size: 0.8rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px style solid rgba(212, 163, 115, 0.3);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: 0.3s ease;
+            color: var(--text-main);
+            font-style: italic;
+        }
+
+        .member-card:hover .description-reveal {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         /* --- CALL TO ACTION --- */
@@ -149,17 +187,33 @@
             margin: 0 10% 100px;
             border: 1px solid var(--accent-low);
         }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
         .btn {
             display: inline-block;
-            margin-top: 30px;
-            padding: 15px 40px;
+            padding: 15px 35px;
             background: var(--accent);
             color: #000;
             text-decoration: none;
             font-weight: 600;
             border-radius: 50px;
             transition: 0.3s;
+            font-size: 0.9rem;
         }
+
+        .btn.secondary {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-low); }
 
         footer { text-align: center; padding: 50px; color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; }
@@ -197,46 +251,74 @@
         <h3>Signature Craft</h3>
         <div class="grid">
             <div class="card">
-                <h4 style="color: var(--accent); margin-bottom: 15px;">Ice Caramel</h4>
-                <p>Velvety espresso meets golden caramel over crystal ice. Designed for the lens, crafted for the palate.</p>
+                <h4 style="color: var(--accent); margin-bottom: 5px;">Ice Caramel</h4>
+                <p>Velvety espresso meets golden caramel.</p>
+                <div class="mini-info">
+                    ✨ <strong>Tasting Notes:</strong> Burnt sugar, creamy vanilla, and a bold Arabica finish. Perfect for golden hour photos.
+                </div>
+            </div>
+            <div class="card">
+                <h4 style="color: var(--accent); margin-bottom: 5px;">Cloud Latte</h4>
+                <p>Aerated milk over a double ristretto.</p>
+                <div class="mini-info">
+                    ☁️ <strong>Vibe:</strong> Light, airy, and effortlessly chic. Our most popular morning pick-me-up.
+                </div>
             </div>
         </div>
     </section>
 
- <section class="section">
-    <h3>The Collective</h3>
-    <div class="grid">
-        <div class="card">
-            <h4>Orville Arnado</h4>
-            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">FOUNDER & CREATIVE DIRECTOR</p>
-        </div>
+    <section class="section">
+        <h3>The Collective</h3>
+        <div class="grid">
+            <div class="card member-card">
+                <h4>Orville Arnado</h4>
+                <p style="color:var(--accent); font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">FOUNDER & CREATIVE DIRECTOR</p>
+                <div class="description-reveal">
+                    "Visionary behind the lens and the beans. Curating the Pause & Pose aesthetic."
+                </div>
+            </div>
 
-        <div class="card">
-            <h4>Josh Nadayag</h4>
-            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">HEAD OF OPERATIONS</p>
-        </div>
+            <div class="card member-card">
+                <h4>Josh Nadayag</h4>
+                <p style="color:var(--accent); font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">HEAD OF OPERATIONS</p>
+                <div class="description-reveal">
+                    "Master of the workflow. Ensuring every shot is pulled to perfection."
+                </div>
+            </div>
 
-        <div class="card">
-            <h4>Danegild Jay Valdez</h4>
-            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">CHIEF STRATEGIST</p>
-        </div>
+            <div class="card member-card">
+                <h4>Danegild Jay Valdez</h4>
+                <p style="color:var(--accent); font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">CHIEF STRATEGIST</p>
+                <div class="description-reveal">
+                    "The mind behind the growth. Turning coffee culture into a lifestyle."
+                </div>
+            </div>
 
-        <div class="card">
-            <h4>Kinberlyn Paghasian</h4>
-            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">VISUAL STYLIST</p>
-        </div>
+            <div class="card member-card">
+                <h4>Kinberlyn Paghasian</h4>
+                <p style="color:var(--accent); font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">VISUAL STYLIST</p>
+                <div class="description-reveal">
+                    "Crafting the 'Pose' in Pause & Pose. Making every cup a masterpiece."
+                </div>
+            </div>
 
-        <div class="card">
-            <h4>Karla Oliveros</h4>
-            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">EXPERIENCE MANAGER</p>
+            <div class="card member-card">
+                <h4>Karla Oliveros</h4>
+                <p style="color:var(--accent); font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;">EXPERIENCE MANAGER</p>
+                <div class="description-reveal">
+                    "Connecting hearts through coffee. Your guide to the ultimate cafe experience."
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <section class="cta">
-        <h3>Ready for your close-up?</h3>
-        <p>Join us at Iligan City East National High School.</p>
-        <a href="#" class="btn">FIND US ON MAP</a>
+        <h3>Connect With Us</h3>
+        <p>Beyond the brew, we’re building a community. Stay updated on our journey.</p>
+        <div class="social-links">
+            <a href="https://instagram.com/pause.and.pause_" target="_blank" class="btn">FOLLOW @PAUSE.AND.PAUSE_</a>
+            <a href="mailto:pauseandpose@gmail.com" class="btn secondary">HELLO@PAUSEANDPOSE.COM</a>
+        </div>
     </section>
 
     <footer>
