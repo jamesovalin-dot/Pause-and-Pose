@@ -1,211 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pause and Pose Coffee</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause & Pose | Premium Coffee</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,600&family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0c0a09;
+            --card-bg: rgba(28, 25, 23, 0.7);
+            --accent: #d4a373; /* Golden Coffee */
+            --accent-low: rgba(212, 163, 115, 0.2);
+            --text-main: #fafaf9;
+            --text-dim: #a8a29e;
+        }
 
-<style>
-:root{
-  --coffee:#b98b65;
-  --coffee-dark:#8a5f3d;
-  --cream:#f6efe9;
-  --text:#3b2a20;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
 
-body{
-  font-family:Inter, sans-serif;
-  background:var(--cream);
-  color:var(--text);
-  line-height:1.6;
-}
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out, visibility 1s;
+        }
+        .brew-icon {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* --- BUBBLE BACKGROUND --- */
+        .bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: var(--accent-low);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: rise 15s infinite ease-in;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+        }
 
-/* NAV */
-nav{
-  display:flex;
-  justify-content:space-between;
-  padding:20px 10%;
-  background:#fff;
-}
+        /* --- NAVIGATION --- */
+        nav {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(12, 10, 9, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--accent); font-weight: 600; }
+        nav ul { display: flex; gap: 30px; list-style: none; }
+        nav ul li { font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; color: var(--text-dim); }
+        nav ul li:hover { color: var(--accent); }
 
-nav h1{
-  font-family:"Playfair Display", serif;
-  font-size:22px;
-}
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero-img-wrapper {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .hero img {
+            width: 320px;
+            border-radius: 24px;
+            filter: grayscale(20%) brightness(90%);
+            transition: 0.5s;
+        }
+        .hero:hover img { filter: grayscale(0%) brightness(100%); transform: scale(1.02); }
+        
+        .hero h2 {
+            font-family: 'Playfair Display';
+            font-size: clamp(3rem, 8vw, 5rem);
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
 
-nav ul{
-  display:flex;
-  gap:20px;
-  list-style:none;
-}
+        /* --- CARDS & CONTENT --- */
+        .section { padding: 100px 10%; }
+        h3 { font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 40px; color: var(--accent); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card:hover {
+            background: rgba(212, 163, 115, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-10px);
+        }
 
-/* HERO */
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  padding:80px 20px;
-  text-align:center;
-}
+        /* --- CALL TO ACTION --- */
+        .cta {
+            background: linear-gradient(45deg, #1c1917, #442c1e);
+            padding: 80px 40px;
+            text-align: center;
+            border-radius: 40px;
+            margin: 0 10% 100px;
+            border: 1px solid var(--accent-low);
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-low); }
 
-.hero img{
-  width:260px;
-  border-radius:20px;
-  margin-bottom:25px;
-}
+        footer { text-align: center; padding: 50px; color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; }
 
-.hero h2{
-  font-family:"Playfair Display", serif;
-  font-size:36px;
-  margin-bottom:10px;
-}
-
-.hero p{
-  max-width:500px;
-  opacity:.8;
-}
-
-/* SECTION */
-.section{
-  padding:70px 10%;
-}
-
-.section h3{
-  font-family:"Playfair Display", serif;
-  font-size:28px;
-  margin-bottom:15px;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-  margin-top:25px;
-}
-
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
-}
-
-/* CTA */
-.cta{
-  background:var(--coffee);
-  color:white;
-  text-align:center;
-  padding:70px 20px;
-  border-radius:30px;
-  margin:40px 10%;
-}
-
-footer{
-  text-align:center;
-  padding:30px;
-  opacity:.6;
-}
-</style>
+    </style>
 </head>
-
 <body>
 
-<!-- NAV -->
-<nav>
-<h1>Pause & Pose</h1>
-<ul>
-<li>Home</li>
-<li>Menu</li>
-<li>About</li>
-<li>Team</li>
-<li>Contact</li>
-</ul>
-</nav>
+    <div id="loader">
+        <div class="brew-icon"></div>
+        <p style="margin-top: 20px; font-family: 'Playfair Display'; letter-spacing: 4px; color: var(--accent);">BREWING...</p>
+    </div>
 
-<!-- HERO -->
-<section class="hero">
-<img src="coffee.jpg" alt="Ice Coffee">
-<h2>TEXTTEXTTEXT Brand tagline</h2>
-<p>TEXTTEXTTEXT Short brand description / vibe / story.</p>
+    <div class="bubbles" id="bubble-container"></div>
+
+    <nav>
+        <div class="logo">PAUSE & POSE.</div>
+        <ul>
+            <li>MENU</li>
+            <li>STUDIO</li>
+            <li>JOURNAL</li>
+            <li>CONTACT</li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-img-wrapper">
+            <img src="product.png" alt="Ice Caramel">
+        </div>
+        <h2>Sip. Pause. Pose.</h2>
+        <p style="max-width: 600px; color: var(--text-dim);">A premium fusion of artisanal caffeine and cinematic aesthetics. Crafting moments, one shot at a time.</p>
+    </section>
+
+    <section class="section">
+        <h3>Signature Craft</h3>
+        <div class="grid">
+            <div class="card">
+                <h4 style="color: var(--accent); margin-bottom: 15px;">Ice Caramel</h4>
+                <p>Velvety espresso meets golden caramel over crystal ice. Designed for the lens, crafted for the palate.</p>
+            </div>
+        </div>
+    </section>
+
+ <section class="section">
+    <h3>The Collective</h3>
+    <div class="grid">
+        <div class="card">
+            <h4>Orville Arnado</h4>
+            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">FOUNDER & CREATIVE DIRECTOR</p>
+        </div>
+
+        <div class="card">
+            <h4>Josh Nadayag</h4>
+            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">HEAD OF OPERATIONS</p>
+        </div>
+
+        <div class="card">
+            <h4>Danegild Jay Valdez</h4>
+            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">CHIEF STRATEGIST</p>
+        </div>
+
+        <div class="card">
+            <h4>Kinberlyn Paghasian</h4>
+            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">VISUAL STYLIST</p>
+        </div>
+
+        <div class="card">
+            <h4>Karla Oliveros</h4>
+            <p style="color:var(--accent); font-size: 0.8rem; font-weight: 600;">EXPERIENCE MANAGER</p>
+        </div>
+    </div>
 </section>
 
-<!-- PRODUCTS -->
-<section class="section">
-<h3>Our Drinks</h3>
-<p>TEXTTEXTTEXT description of drinks.</p>
+    <section class="cta">
+        <h3>Ready for your close-up?</h3>
+        <p>Join us at Iligan City East National High School.</p>
+        <a href="#" class="btn">FIND US ON MAP</a>
+    </section>
 
-<div class="cards">
-<div class="card">
-<h4>TEXTTEXTTEXT Drink Name</h4>
-<p>TEXTTEXTTEXT description</p>
-</div>
+    <footer>
+        PAUSE & POSE © 2026 | ESTABLISHED IN ILIGAN
+    </footer>
 
-<div class="card">
-<h4>TEXTTEXTTEXT Drink Name</h4>
-<p>TEXTTEXTTEXT description</p>
-</div>
+    <script>
+        // 5-Second Loader Logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 1000);
+            }, 5000); 
+        });
 
-<div class="card">
-<h4>TEXTTEXTTEXT Drink Name</h4>
-<p>TEXTTEXTTEXT description</p>
-</div>
-</div>
-</section>
-
-<!-- ABOUT -->
-<section class="section">
-<h3>About Us</h3>
-<p>TEXTTEXTTEXT brand story, concept, inspiration.</p>
-</section>
-
-<!-- TEAM -->
-<section class="section">
-<h3>Meet the Team</h3>
-
-<div class="cards">
-<div class="card">
-<h4>TEXTTEXTTEXT Name</h4>
-<p>TEXTTEXTTEXT Role</p>
-</div>
-
-<div class="card">
-<h4>TEXTTEXTTEXT Name</h4>
-<p>TEXTTEXTTEXT Role</p>
-</div>
-
-<div class="card">
-<h4>TEXTTEXTTEXT Name</h4>
-<p>TEXTTEXTTEXT Role</p>
-</div>
-</div>
-</section>
-
-<!-- CTA -->
-<section class="cta">
-<h3>TEXTTEXTTEXT Call To Action</h3>
-<p>TEXTTEXTTEXT order / visit / follow</p>
-</section>
-
-<!-- CONTACT -->
-<section class="section">
-<h3>Contact</h3>
-<p>TEXTTEXTTEXT email</p>
-<p>TEXTTEXTTEXT social media</p>
-<p>TEXTTEXTTEXT location</p>
-</section>
-
-<footer>
-Pause & Pose — TEXTTEXTTEXT copyright
-</footer>
-
+        // Generate Bubbly Effect
+        const container = document.getElementById('bubble-container');
+        for (let i = 0; i < 15; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDelay = Math.random() * 10 + 's';
+            bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
+            container.appendChild(bubble);
+        }
+    </script>
 </body>
 </html>
